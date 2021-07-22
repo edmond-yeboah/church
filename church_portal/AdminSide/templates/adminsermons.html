@@ -1,0 +1,225 @@
+{% extends 'adminbase.html' %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+ <div class="row">
+                            <div class="col-12">
+                                <h4 class="mb-4 mt-4">Sermons</h4>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+
+
+                        <div class="row mb-2">
+            <div class="col-xl-8">
+              <form action="" method="POST"
+                class="
+                  row
+                  gy-2
+                  gx-2
+                  align-items-center
+                  justify-content-xl-start justify-content-between
+                "
+              >
+              {% csrf_token %}
+                <div class="col-auto">
+                  <label for="inputPassword2" class="visually-hidden"
+                    >Search</label
+                  >
+                  <input
+                    type="search"
+                    class="form-control"
+                    id="inputPassword2"
+                    name="searchquery"
+                    placeholder="Search for a sermon..."
+                  />
+                </div>
+                <div class="col-auto">
+                  <div class="col-xl-4">
+                    <div class="text-xl-end mt-xl-0 mt-2">
+                      <button type="submit" class="btn btn-dark me-1" name="action" value="search">
+                        Search
+                      </button>
+                      {% comment %}
+                      <button type="button" class="btn btn-light mb-2">
+                        Export
+                      </button>
+                      {% endcomment %}
+                    </div>
+                  </div>
+                  <!-- end col-->
+                </div>
+              </form>
+            </div>
+            <div class="col-xl-4">
+              <div class="text-xl-end mt-xl-0 mt-2">
+                <button
+                  type="button"
+                  class="btn btn-dark mb-2 me-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                >
+                  <i class=" uil-book-open me-1"></i> Add New Sermon
+                </button>
+                
+                <button type="button" class="btn btn-dark mb-2"> <a href="{% url 'adminsermon' %}" > <i class="mdi mdi-autorenew"></i></a></button>
+               
+                {% comment %} <a href="javascript: void(0);" class="btn btn-primary">
+                                                <i class="mdi mdi-autorenew"></i>
+                                            </a> {% endcomment %}
+              </div>
+            </div>
+            <!-- end col-->
+          </div>
+
+
+
+                        <div class="row">
+                        {% if allsermons %}
+                        {% for s in allsermons  %}
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{s.title}}</h5>
+                                                <p class="card-text">{{s.content|truncatechars:100}}</p>
+                                                <p class="card-text"><small class="text-muted">{{s.added_on|timesince}} ago</small></p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end col -->
+                                        <div class="col-md-4">
+                                            <img src="{{s.image.url}}" class="card-img" alt="...">
+                                        </div> <!-- end col -->
+                                    </div> <!-- end row-->
+                                </div> <!-- end card -->
+                                
+                            </div> <!-- end col-->
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <!-- end row -->
+
+
+
+                        <div
+    class="modal fade"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header modal-colored-header bg-dark">
+          <h4 class="modal-title" id="myCenterModalLabel"><i class=" uil-book-open me-1"></i>New Sermon</h4>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-hidden="true"
+            style="olor: white"
+          >
+            X
+          </button>
+        </div>
+        <div class="modal-body">
+          {% comment %}
+          <div class="text-center mt-2 mb-4">
+            <a href="index.html" class="text-success">
+              <span
+                ><img src="assets/images/logo-dark.png" alt="" height="18"
+              /></span>
+            </a>
+          </div>
+          {% endcomment %}
+
+          <form class="ps-3 pe-3" action="" method="POST" enctype='multipart/form-data'>
+          {% csrf_token %}
+            <div class="mb-3">
+              <label for="title" class="form-label">Sermon Title</label>
+              <input
+                class="form-control"
+                type="text"
+                id="title"
+                required
+                name="title"
+                placeholder="Sermon title"
+              />
+            </div>
+
+            <div class="col-sm-12 mb-3">
+                                                                    <label class="form-label">Sermon image</label>
+                                                                    <input class="form-control" type="file" name="pic" id="pic" accept="image*">
+                                                                </div>
+
+
+                                                                <label for="emailaddress" class="form-label">Sermon content</label>
+                                                                <div class="form-floating">
+                                                                
+                                                        <textarea class="form-control mb-4" placeholder="Leave a comment here" id="floatingTextarea" name="content" style="height: 100px;"></textarea>
+                                                        <label for="floatingTextarea">Write sermon...</label>
+                                                    </div>
+
+            {% comment %} <div class="mb-3">
+              <label for="emailaddress" class="form-label">Email address</label>
+              <input
+                class="form-control"
+                type="email"
+                id="emailaddress"
+                required
+                name="email"
+                placeholder="example@example.com"
+              />
+            </div> {% endcomment %}
+
+            {% comment %} <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                class="form-control"
+                type="password"
+                required
+                name="password"
+                id="password"
+                placeholder="Enter your password"
+              />
+            </div> {% endcomment %}
+
+            {% comment %}
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="customCheck1"
+                />
+                <label class="form-check-label" for="customCheck1"
+                  >I accept <a href="#">Terms and Conditions</a></label
+                >
+              </div>
+            </div>
+            {% endcomment %}
+
+            <div class="mb-3 text-center">
+              <button class="btn btn-dark" type="submit" name="action" value="add sermon">
+                Add Sermon
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- end modal content-->
+    </div>
+    <!-- end modal dialog-->
+  </div>
+  <!-- end modal-->
+
+</div>
+
+{% endblock content %}
+
+

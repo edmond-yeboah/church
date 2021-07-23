@@ -7,6 +7,7 @@ class sermon(models.Model):
     content = models.CharField(blank=True,null=True, max_length=5000)
     image = models.ImageField(upload_to='sermon_images')
     added_on = models.DateTimeField(auto_now_add=True)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

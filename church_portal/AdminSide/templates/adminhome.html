@@ -15,20 +15,20 @@
                 id="dash-daterange"
               />
               <span
-                class="input-group-text bg-primary border-primary text-white"
+                class="input-group-text bg-dark border-dark text-white"
               >
                 <i class="mdi mdi-calendar-range font-13"></i>
               </span>
             </div>
-            <a href="javascript: void(0);" class="btn btn-primary ms-2">
+            <a href="{% url 'admindash' %}" class="btn btn-dark ms-2">
               <i class="mdi mdi-autorenew"></i>
             </a>
-            <a href="javascript: void(0);" class="btn btn-primary ms-1">
+            {% comment %} <a href="javascript: void(0);" class="btn btn-primary ms-1">
               <i class="mdi mdi-filter-variant"></i>
-            </a>
+            </a> {% endcomment %}
           </form>
         </div>
-        <h4 class="page-title">Dashboard</h4>
+        <h4 class="page-title">Home</h4>
       </div>
     </div>
   </div>
@@ -44,15 +44,15 @@
                 <i class="mdi mdi-account-multiple widget-icon"></i>
               </div>
               <h5 class="text-muted fw-normal mt-0" title="Number of Customers">
-                Customers
+                Church Members
               </h5>
-              <h3 class="mt-3 mb-3">36,254</h3>
-              <p class="mb-0 text-muted">
+              <h3 class="mt-3 mb-3">{{allusers | length}}</h3>
+              {% comment %} <p class="mb-0 text-muted">
                 <span class="text-success me-2"
                   ><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span
                 >
                 <span class="text-nowrap">Since last month</span>
-              </p>
+              </p> {% endcomment %}
             </div>
             <!-- end card-body-->
           </div>
@@ -64,18 +64,18 @@
           <div class="card widget-flat">
             <div class="card-body">
               <div class="float-end">
-                <i class="mdi mdi-cart-plus widget-icon"></i>
+                <i class="mdi mdi-book-open-variant widget-icon"></i>
               </div>
               <h5 class="text-muted fw-normal mt-0" title="Number of Orders">
-                Orders
+                Sermons
               </h5>
-              <h3 class="mt-3 mb-3">5,543</h3>
-              <p class="mb-0 text-muted">
+              <h3 class="mt-3 mb-3">{{sermons | length}}</h3>
+              {% comment %} <p class="mb-0 text-muted">
                 <span class="text-danger me-2"
                   ><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span
                 >
                 <span class="text-nowrap">Since last month</span>
-              </p>
+              </p> {% endcomment %}
             </div>
             <!-- end card-body-->
           </div>
@@ -95,13 +95,13 @@
               <h5 class="text-muted fw-normal mt-0" title="Average Revenue">
                 Revenue
               </h5>
-              <h3 class="mt-3 mb-3">$6,254</h3>
-              <p class="mb-0 text-muted">
+              <h3 class="mt-3 mb-3">GH&#8373;{{total}}.00</h3>
+              {% comment %} <p class="mb-0 text-muted">
                 <span class="text-danger me-2"
                   ><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span
                 >
                 <span class="text-nowrap">Since last month</span>
-              </p>
+              </p> {% endcomment %}
             </div>
             <!-- end card-body-->
           </div>
@@ -110,7 +110,17 @@
         <!-- end col-->
 
         <div class="col-lg-6">
-          <div class="card widget-flat">
+
+        <div class="card ribbon-box">
+                                                        <div class="card-body">
+                                                            <div class="ribbon ribbon-dark float-start"><i class="mdi mdi-emoticon-outline me-1"></i> Hey !</div>
+                                                            {% comment %} <h5 class="text-primary float-end mt-0">Primary Header</h5> {% endcomment %}
+                                                            <div class="ribbon-content">
+                                                                You are doing a great job, Keep it up!
+                                                            </div>
+                                                        </div> <!-- end card-body -->
+                                                    </div> <!-- end card-->
+          {% comment %} <div class="card widget-flat">
             <div class="card-body">
               <div class="float-end">
                 <i class="mdi mdi-pulse widget-icon"></i>
@@ -125,7 +135,7 @@
               </p>
             </div>
             <!-- end card-body-->
-          </div>
+          </div> {% endcomment %}
           <!-- end card-->
         </div>
         <!-- end col-->
@@ -137,7 +147,7 @@
     <div class="col-xl-7 col-lg-6">
       <div class="card card-h-100">
         <div class="card-body">
-          <div class="dropdown float-end">
+          {% comment %} <div class="dropdown float-end">
             <a
               href="#"
               class="dropdown-toggle arrow-none card-drop"
@@ -160,16 +170,94 @@
               <!-- item-->
               <a href="javascript:void(0);" class="dropdown-item">Action</a>
             </div>
-          </div>
-          <h4 class="header-title mb-3">Projections Vs Actuals</h4>
+          </div> {% endcomment %}
+          <h4 class="header-title mb-3">Church Members</h4>
 
-          <div dir="ltr">
+          <table class="table table-centered mb-0">
+              <thead class="table-light">
+                <tr>
+                  {% comment %} <th style="width: 20px">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="customCheck1"
+                      />
+                      <label class="form-check-label" for="customCheck1"
+                        >&nbsp;</label
+                      >
+                    </div>
+                  </th> {% endcomment %}
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Age</th>
+                  <th>Email</th>
+                  {% comment %} <th>Telephone</th> {% endcomment %}
+                  <th>Status</th>
+                  {% comment %} <th style="width: 125px">Action</th> {% endcomment %}
+                </tr>
+              </thead>
+              <tbody>
+              {% for p in twousers  %}
+                <tr>
+                  {% comment %} <td>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        id="customCheck11"
+                      />
+                      <label class="form-check-label" for="customCheck11"
+                        >&nbsp;</label
+                      >
+                    </div>
+                  </td> {% endcomment %}
+                  <td>
+                    
+                    {{p.first_name}}
+                    
+                  </td>
+                  <td>
+                    {{p.last_name}}
+                  </td>
+                  <td>
+                    {{p.age}}
+                  </td>
+                  <td>{{p.email}}</td>
+                  {% comment %} <td>{{p.tel}}</td> {% endcomment %}
+                  <td>
+                    <h4>
+                    {% if p.status %}
+                      <span class="badge badge-info-lighten">{{p.status}}</span>
+                      {% else %}
+                      <span >Update status</span>
+                      {% endif %}
+                    </h4>
+                  </td>
+                  <td>
+                    {% comment %} <a href="javascript:void(0);" class="action-icon">
+                      <i class="mdi mdi-eye"></i
+                    ></a> {% endcomment %}
+                    {% comment %} <a href="{% url 'adminusers' %}?uid={{p.id}}" class="action-icon">
+                      <i class="mdi mdi-square-edit-outline"></i
+                    ></a> {% endcomment %}
+                    {% comment %} <a href="javascript:void(0);" class="action-icon">
+                      <i class="mdi mdi-delete"></i
+                    ></a> {% endcomment %}
+                  </td>
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          {% comment %} <div dir="ltr">
             <div
               id="high-performing-product"
               class="apex-charts"
               data-colors="#727cf5,#e3eaef"
             ></div>
-          </div>
+          </div> {% endcomment %}
         </div>
         <!-- end card-body-->
       </div>
@@ -183,7 +271,7 @@
     <div class="col-lg-8">
       <div class="card">
         <div class="card-body">
-          <div class="dropdown float-end">
+          {% comment %} <div class="dropdown float-end">
             <a
               href="#"
               class="dropdown-toggle arrow-none card-drop"
@@ -206,12 +294,12 @@
               <!-- item-->
               <a href="javascript:void(0);" class="dropdown-item">Action</a>
             </div>
-          </div>
+          </div> {% endcomment %}
           <h4 class="header-title mb-3">Revenue</h4>
 
-          <div class="chart-content-bg">
-            <div class="row text-center">
-              <div class="col-md-6">
+          {% comment %} <div class="chart-content-bg">
+            <div class="row text-center"> {% endcomment %}
+              {% comment %} <div class="col-md-6">
                 <p class="text-muted mb-0 mt-3">Current Week</p>
                 <h2 class="fw-normal mb-3">
                   <small
@@ -224,8 +312,8 @@
                   ></small>
                   <span>$58,254</span>
                 </h2>
-              </div>
-              <div class="col-md-6">
+              </div> {% endcomment %}
+              {% comment %} <div class="col-md-6">
                 <p class="text-muted mb-0 mt-3">Previous Week</p>
                 <h2 class="fw-normal mb-3">
                   <small
@@ -238,20 +326,20 @@
                   ></small>
                   <span>$69,524</span>
                 </h2>
-              </div>
-            </div>
-          </div>
+              </div> {% endcomment %}
+            {% comment %} </div>
+          </div> {% endcomment %}
 
           <div class="dash-item-overlay d-none d-md-block" dir="ltr">
-            <h5>Today's Earning: $2,562.30</h5>
-            <p class="text-muted font-13 mb-3 mt-2">
+            <h5>Today's Earning: GH&#8373;{{total}}.00</h5>
+            {% comment %} <p class="text-muted font-13 mb-3 mt-2">
               Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies
               nisi. Nam eget dui. Etiam rhoncus...
-            </p>
-            <a href="javascript: void(0);" class="btn btn-outline-primary"
+            </p> {% endcomment %}
+            {% comment %} <a href="javascript: void(0);" class="btn btn-outline-primary"
               >View Statements
               <i class="mdi mdi-arrow-right ms-2"></i>
-            </a>
+            </a> {% endcomment %}
           </div>
           <div dir="ltr">
             <div
@@ -270,7 +358,7 @@
     <div class="col-lg-4">
       <div class="card">
         <div class="card-body">
-          <div class="dropdown float-end">
+          {% comment %} <div class="dropdown float-end">
             <a
               href="#"
               class="dropdown-toggle arrow-none card-drop"
@@ -293,13 +381,40 @@
               <!-- item-->
               <a href="javascript:void(0);" class="dropdown-item">Action</a>
             </div>
-          </div>
-          <h4 class="header-title">Revenue By Location</h4>
-          <div class="mb-4 mt-4">
-            <div id="world-map-markers" style="height: 224px"></div>
-          </div>
+          </div> {% endcomment %}
+          <h4 class="header-title">Church statistics</h4>
 
-          <h5 class="mb-1 mt-0 fw-normal">New York</h5>
+          <ul class="list-group">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Total Church Members
+                  <span class="badge bg-dark rounded-pill">{{allusers | length}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Church Members at Spintex Branch
+                  <span class="badge bg-dark rounded-pill">{{spintex | length}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Church Members at Cantoment Branch
+                  <span class="badge bg-dark rounded-pill">{{cantoment | length}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Church Members at East Legon Branch
+                  <span class="badge bg-dark rounded-pill">{{eastlegon |length}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Total Sermons
+                  <span class="badge bg-dark rounded-pill">{{sermons| length}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Total Revenue
+                  <span >GH&#8373;{{total}}.00</span>
+              </li>
+          </ul>    
+          {% comment %} <div class="mb-4 mt-4">
+            <div id="world-map-markers" style="height: 224px"></div>
+          </div> {% endcomment %}
+
+          {% comment %} <h5 class="mb-1 mt-0 fw-normal">New York</h5>
           <div class="progress-w-percent">
             <span class="progress-value fw-bold">72k </span>
             <div class="progress progress-sm">
@@ -312,9 +427,9 @@
                 aria-valuemax="100"
               ></div>
             </div>
-          </div>
+          </div> {% endcomment %}
 
-          <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
+          {% comment %} <h5 class="mb-1 mt-0 fw-normal">San Francisco</h5>
           <div class="progress-w-percent">
             <span class="progress-value fw-bold">39k </span>
             <div class="progress progress-sm">
@@ -327,9 +442,9 @@
                 aria-valuemax="100"
               ></div>
             </div>
-          </div>
+          </div> {% endcomment %}
 
-          <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
+          {% comment %} <h5 class="mb-1 mt-0 fw-normal">Sydney</h5>
           <div class="progress-w-percent">
             <span class="progress-value fw-bold">25k </span>
             <div class="progress progress-sm">
@@ -342,9 +457,9 @@
                 aria-valuemax="100"
               ></div>
             </div>
-          </div>
+          </div> {% endcomment %}
 
-          <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
+          {% comment %} <h5 class="mb-1 mt-0 fw-normal">Singapore</h5>
           <div class="progress-w-percent mb-0">
             <span class="progress-value fw-bold">61k </span>
             <div class="progress progress-sm">
@@ -357,7 +472,7 @@
                 aria-valuemax="100"
               ></div>
             </div>
-          </div>
+          </div> {% endcomment %}
         </div>
         <!-- end card-body-->
       </div>
@@ -367,7 +482,7 @@
   </div>
   <!-- end row -->
 
-  <div class="row">
+  {% comment %} <div class="row">
     <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
       <div class="card">
         <div class="card-body">
@@ -738,5 +853,5 @@
     <!-- end col -->
   </div>
   <!-- end row -->
-</div>
+</div> {% endcomment %}
 {% endblock %}

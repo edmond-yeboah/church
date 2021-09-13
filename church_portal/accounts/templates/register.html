@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-    
-<!-- Mirrored from coderthemes.com/hyper/saas/pages-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 14 Jul 2021 12:37:53 GMT -->
-<head>
+
+    <head>
         <meta charset="utf-8" />
         <title>Register | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,103 +17,106 @@
 
     </head>
 
-    <body class="loading authentication-bg" data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <body class="authentication-bg pb-0" data-layout-config='{"darkMode":false}'>
 
-        <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-xxl-4 col-lg-5">
-                        <div class="card">
-                            <!-- Logo-->
-                            <div class="card-header pt-2 pb-2 text-center bg-primary">
-                                <a href="{% url 'home' %}">
-                                    <span><img src="/static/assets/images/logo.png" alt="" height="18"></span>
-                                </a>
+        <div class="auth-fluid">
+            <!--Auth fluid left content -->
+            <div class="auth-fluid-form-box">
+                <div class="align-items-center d-flex h-100">
+                    <div class="card-body">
+
+                        <!-- Logo -->
+                        <div class="auth-brand text-center text-lg-start">
+                            <a href="{% url 'home' %}" class="logo-dark">
+                                <span><img src="/static/assets/images/logo-dark.png" alt="" height="18"></span>
+                            </a>
+                            <a href="{% url 'home' %}" class="logo-light">
+                                <span><img src="/static/assets/images/logo.png" alt="" height="18"></span>
+                            </a>
+                        </div>
+
+                        <!-- title-->
+                        <h4 class="mt-0">Free Sign Up</h4>
+                        <p class="text-muted mb-4">Don't have an account? Create your account, it takes less than a minute</p>
+                        {% include 'messages.html' %}
+
+                        <!-- form -->
+                        <form action="" method="POST">
+                        {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input class="form-control" type="email" id="email" name="email" placeholder="Enter your emailaddress" required>
                             </div>
-
-                            <div class="card-body p-4">
-                                
-                                <div class="text-center w-75 m-auto">
-                                    <h4 class="text-dark-50 text-center mt-0 fw-bold">Free Sign Up</h4>
-                                    <p class="text-muted mb-4">Don't have an account? Create your account, it takes less than a minute </p>
-
-                                    {% include 'messages.html' %}
-                                    
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input class="form-control" type="password" id="password" name="password1" required placeholder="Enter your password">
+                                {% comment %} <div class="input-group-text" data-password="false">
+                                    <span class="password-eye"></span>
+                                </div> {% endcomment %}
+                            </div>
+                            <div class="mb-3">
+                                <label for="cpassword" class="form-label">Re-Type Password</label>
+                                <input class="form-control" type="password" required id="cpassword" name="password2" placeholder="Confirm your password">
+                            </div>
+                            {% comment %} <div class="mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkbox-signup">
+                                    <label class="form-check-label" for="checkbox-signup">I accept <a href="javascript: void(0);" class="text-muted">Terms and Conditions</a></label>
                                 </div>
+                            </div> {% endcomment %}
+                            <div class="mb-0 d-grid text-center">
+                                <button class="btn btn-primary" type="submit"><i class="mdi mdi-account-circle"></i> Sign Up </button>
+                            </div>
+                            <!-- social-->
+                            <div class="text-center mt-4">
+                                <p class="text-muted font-16">Sign up using</p>
+                                <ul class="social-list list-inline mt-3">
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                        <!-- end form-->
 
-                                <form action=" " method="POST">
-                                {% csrf_token %}
+                        <!-- Footer-->
+                        <footer class="footer footer-alt">
+                            <p class="text-muted">Already have account? <a href="{% url 'login' %}" class="text-muted ms-1"><b>Log In</b></a></p>
+                        </footer>
 
-                                    {% comment %} <div class="mb-3">
-                                        <label for="fullname" class="form-label">Full Name</label>
-                                        <input class="form-control" type="text" id="fullname" placeholder="Enter your name" required>
-                                    </div> {% endcomment %}
-
-                                    <div class="mb-3">
-                                        <label for="emailaddress" class="form-label">Email address</label>
-                                        <input class="form-control" type="email" id="emailaddress" name="email" required placeholder="Enter your email">
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <div class="input-group input-group-merge">
-                                            <input type="password" id="password" name="password1" class="form-control" placeholder="Enter your password">
-                                            <div class="input-group-text" data-password="false">
-                                                <span class="password-eye"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="cpassword" class="form-label">Re-Type Password</label>
-                                        <div class="input-group input-group-merge">
-                                            <input type="password" id="cpassword" name="password2" class="form-control" placeholder="Confirm your password">
-                                            <div class="input-group-text" data-password="false">
-                                                <span class="password-eye"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {% comment %} <div class="mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="checkbox-signup">
-                                            <label class="form-check-label" for="checkbox-signup">I accept <a href="#" class="text-muted">Terms and Conditions</a></label>
-                                        </div>
-                                    </div> {% endcomment %}
-
-                                    <div class="mb-3 text-center">
-                                        <button class="btn btn-primary" type="submit"> Sign Up </button>
-                                    </div>
-
-                                </form>
-                            </div> <!-- end card-body -->
-                        </div>
-                        <!-- end card -->
-
-                        <div class="row mt-3">
-                            <div class="col-12 text-center">
-                                <p class="text-muted">Already have account? <a href="{% url 'login' %}" class="text-muted ms-1"><b>Log In</b></a></p>
-                            </div> <!-- end col-->
-                        </div>
-                        <!-- end row -->
-
-                    </div> <!-- end col -->
-                </div>
-                <!-- end row -->
+                    </div> <!-- end .card-body -->
+                </div> <!-- end .align-items-center.d-flex.h-100-->
             </div>
-            <!-- end container -->
-        </div>
-        <!-- end page -->
+            <!-- end auth-fluid-form-box-->
 
-        {% comment %} <footer class="footer footer-alt">
-            2018 - 2021 © Hyper - Coderthemes.com
-        </footer> {% endcomment %}
+            <!-- Auth fluid right content -->
+            <div class="auth-fluid-right text-center">
+                <div class="auth-user-testimonial">
+                    <h2 class="mb-3">{{thequote.title}}</h2>
+                    <p class="lead"><i class="mdi mdi-format-quote-open"></i>{{thequote.content}}<i class="mdi mdi-format-quote-close"></i>
+                    </p>
+                    <p>
+                        - {{thequote.verse}}
+                    </p>
+                </div> <!-- end auth-user-testimonial-->
+            </div>
+            <!-- end Auth fluid right content -->
+        </div>
+        <!-- end auth-fluid-->
 
         <!-- bundle -->
         <script src="/static/assets/js/vendor.min.js"></script>
         <script src="/static/assets/js/app.min.js"></script>
-        
+
     </body>
 
-<!-- Mirrored from coderthemes.com/hyper/saas/pages-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 14 Jul 2021 12:37:53 GMT -->
 </html>

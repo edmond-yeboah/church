@@ -159,7 +159,11 @@
                   <td>{{p.tel}}</td>
                   <td>
                     <h4>
-                      <span class="badge badge-info-lighten">Active</span>
+                    {% if p.status %}
+                      <span class="badge badge-info-lighten">{{p.status}}</span>
+                      {% else %}
+                      <span >Update status</span>
+                      {% endif %}
                     </h4>
                   </td>
                   <td>
@@ -411,19 +415,33 @@
                                                     <div class="row g-2">
                                                         <div class="col-md">
                                                             <div class="form-floating">
-                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="mdo@example.com" />
-                                                                <label for="floatingInputGrid">Email address</label>
+                                                                <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" name="branch">
+                                                                {% if userdetails.church_branch %}
+                                                                <option selected value={{userdetails.church_branch}}>{{userdetails.church_branch}}</option>
+                                                                {% else %}
+                                                                <option selected value="none">Select User Church Branch</option>
+                                                                {% endif %}
+                                                                    
+                                                                    <option value="Spintex">Spintex</option>
+                                                                    <option value="East Legon">East Legon</option>
+                                                                    <option value="Cantoment">Cantoment</option>
+                                                                </select>
+                                                                <label for="floatingSelectGrid">User Church Branch</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-md">
                                                             <div class="form-floating">
-                                                                <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
-                                                                    <option selected>Open this select menu</option>
-                                                                    <option value="1">One</option>
-                                                                    <option value="2">Two</option>
-                                                                    <option value="3">Three</option>
+                                                                <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example" name="status">
+                                                                {% if userdetails.status %}
+                                                                    <option selected value={{userdetails.status}}>{{userdetails.status}}</option>
+                                                                    {% else %}
+                                                                    <option selected value="none">Select User Church Status</option>
+                                                                    {% endif %}
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
+                                                                    <option value="Deceased">Deceased</option>
                                                                 </select>
-                                                                <label for="floatingSelectGrid">Works with selects</label>
+                                                                <label for="floatingSelectGrid">User Church Status </label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -439,25 +457,39 @@
 
                                                     <h5 class="mb-4 mt-4 text-uppercase"><i class="mdi mdi-account-group-outline me-1"></i> Family Hierarchy</h5>
 
-                                                    <div class="row g-2">
-                                                        <div class="col-md">
-                                                            <div class="form-floating">
-                                                                <input type="email" class="form-control" id="floatingInputGrid" placeholder="name@example.com" value="mdo@example.com" />
-                                                                <label for="floatingInputGrid">Email address</label>
-                                                            </div>
+                                                    <div class="row">
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="gfather" class="form-label">Grand Father</label>
+                                                            <input type="text" class="form-control" id="gfather" disabled="" {% if fam %} {% if fam.gfather %} value="{{fam.gfather.first_name |ljust:"7"}}{{fam.gfather.last_name}} ({{fam.gfather.username}})"{% else %} value="Not set by user"{% endif %}{% endif %} /> 
                                                         </div>
-                                                        <div class="col-md">
-                                                            <div class="form-floating">
-                                                                <select class="form-select" id="floatingSelectGrid" aria-label="Floating label select example">
-                                                                    <option selected>Open this select menu</option>
-                                                                    <option value="1">One</option>
-                                                                    <option value="2">Two</option>
-                                                                    <option value="3">Three</option>
-                                                                </select>
-                                                                <label for="floatingSelectGrid">Works with selects</label>
-                                                            </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="gmother" class="form-label">Grand Mother</label>
+                                                            <input type="text" class="form-control" id="gmother" disabled="" {% if fam %} {% if fam.gmother %} value="{{fam.gmother.first_name |ljust:"7"}}{{fam.gmother.last_name}} ({{fam.gmother.username}})" {% else %}value="Not set by user"{% endif %}{% endif %} >
                                                         </div>
                                                     </div>
+
+                                                    <div class="row g-2">
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="father" class="form-label">Father</label>
+                                                            <input type="text" class="form-control" id="father" disabled="" {% if fam %} {% if fam.father %} value="{{fam.father.first_name |ljust:"7"}}{{fam.father.last_name}} ({{fam.father.username}})" {% else %}value="Not set by user"{% endif %}{% endif %} >
+                                                        </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="mother" class="form-label">Mother</label>
+                                                            <input type="text" class="form-control" id="mother" disabled="" {% if fam %} {% if fam.mother %} value="{{fam.mother.first_name |ljust:"7"}}{{fam.mother.last_name}}({{fam.mother.username}})"{% else %}value="Not set by user"{% endif %}{% endif %} >
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row g-2">
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="spouse" class="form-label">Spouse</label>
+                                                            <input type="text" class="form-control" id="spouse" disabled="" {% if fam %} {% if fam.spouse %} value="{{fam.spouse.first_name |ljust:"7"}}{{fam.spouse.last_name}} ({{fam.spouse.username}})"{% else %}value="Not set by user"{% endif %}{% endif %} >
+                                                        </div>
+                                                        <div class="mb-3 col-md-6">
+                                                            <label for="child" class="form-label">Child</label>
+                                                            <input type="text" class="form-control" id="child" disabled="" {% if fam %} {% if fam.child %} value="{{fam.child.first_name |ljust:"7"}}{{fam.child.last_name}} ({{fam.child.username}})"{% else %}value="Not set by user"{% endif %}{% endif %} >
+                                                        </div>
+                                                    </div>
+                                                    
                                                     {% comment %} <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="mb-3">
@@ -474,9 +506,9 @@
                                                             {% comment %} </div>
                                                         </div> <!-- end col -->
                                                     </div> <!-- end row --> {% endcomment %}
-    
+                                                    <input hidden name="userid" value={{userdetails.id}} >
                                                     <div class="text-end">
-                                                        <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Update</button>
+                                                        <button type="submit" class="btn btn-success mt-2" name="action" value="updateuser"><i class="mdi mdi-content-save"  ></i> Update</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -591,7 +623,7 @@
             {% endcomment %}
 
             <div class="mb-3 text-center">
-              <button class="btn btn-primary" type="submit" name="action" value="new user">
+              <button class="btn btn-dark" type="submit" name="action" value="new user">
                 Register User
               </button>
             </div>

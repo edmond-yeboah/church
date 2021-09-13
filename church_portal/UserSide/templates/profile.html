@@ -169,18 +169,18 @@
                                     <div class="card-body">
                                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                             {% comment %} <li class="nav-item">
-                                                <a href="#aboutme" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                                <a href="#aboutme" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
                                                     About
                                                 </a>
                                             </li> {% endcomment %}
-                                            {% comment %} <li class="nav-item">
-                                                <a href="#timeline" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                                    Timeline
-                                                </a>
-                                            </li> {% endcomment %}
                                             <li class="nav-item">
-                                                <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                                   Profile Setting
+                                                <a href="#timeline" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                                    Family Hierarchy
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active">
+                                                   Profile Update
                                                 </a>
                                             </li>
                                         </ul>
@@ -296,136 +296,243 @@
                                             </div> <!-- end tab-pane --> {% endcomment %}
                                             <!-- end about me section content -->
     
-                                            {% comment %} <div class="tab-pane show active" id="timeline">
+                                            <div class="tab-pane show" id="timeline">
+
+                                                    <form action="" method="POST" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Grand parents</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                            <label for="grand-father" class="form-label">Grand Father</label>
+                                                            <select class="form-select" id="grand-father" name="gfather">
+                                                            {% if fam %}
+                                                            {% if fam.gfather %}
+                                                                <option value={{fam.gfather.username}}>{{fam.gfather.first_name |ljust:"10"}}{{fam.gfather.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                            {% endif %}
+                                                            
+                                                            {% endif %}
+                                                                {% comment %} <option value="none">None</option> {% endcomment %}
+                                                           
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+                                            
+                                                            </select>
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="grand-mother" class="form-label">Grand Mother</label>
+                                                            <select class="form-select" id="grand-mother" name="gmother">
+                                                            
+                                                            {% if fam %}
+                                                                {% if fam.gmother %}
+                                                                <option value={{fam.gmother.username}}>{{fam.gmother.first_name |ljust:"10"}}{{fam.gmother.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                            {% endif %}
+                                                            
+                                                            {% endif %}
+
+                                                            {% comment %} <option value="none">None</option> {% endcomment %}
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                    </div> <!-- end row -->
+
+                                                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> parents</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="father" class="form-label">Father</label>
+                                                            <select class="form-select" id="father" name="father">
+
+                                                            {% if fam %}
+                                                                {% if fam.father %}
+                                                                <option value={{fam.father.username}}>{{fam.father.first_name |ljust:"10"}}{{fam.father.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                            {% endif %}
+
+                                                            
+                                                            {% endif %}
+
+                                                            {% comment %} <option value="none">None</option> {% endcomment %}
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+
+                                                            </select>
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="mother" class="form-label">Mother</label>
+                                                            <select class="form-select" id="mother" name="mother">
+                                                                
+                                                                {% if fam %}
+                                                                {% if fam.mother %}
+                                                                <option value={{fam.mother.username}}>{{fam.mother.first_name |ljust:"10"}}{{fam.mother.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                                {% endif %}
+                                                                
+                                                            {% endif %}
+
+                                                            {% comment %} <option value="none">None</option> {% endcomment %}
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                    </div> <!-- end row -->
+
+                                                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> nuclear family</h5>
+
+                                                     <div class="row">
+                                                        <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="spouse" class="form-label">Spouse</label>
+                                                            <select class="form-select" id="spouse" name="spouse">
+                                                                
+                                                            {% if fam %}
+                                                            {% if fam.spouse %}
+                                                                <option selected value={{fam.spouse.username}}>{{fam.spouse.first_name |ljust:"10"}}{{fam.spouse.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                            {% endif %}
+
+                                                            
+                                                            {% endif %}
+                                                            
+                                                            {% comment %} <option value="none">None</option> {% endcomment %}
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="example-multiselect" class="form-label">Child / Children</label>
+                                                            <select id="example-multiselect" multiple class="form-control" name="child">
+
+                                                            {% if fam %}
+                                                            {% if fam.child %}
+                                                                <option value={{fam.child.username}} selected>{{fam.child.first_name |ljust:"10"}}{{fam.child.last_name}}</option>
+                                                                {% else %}
+                                                             <option value="none" selected>None</option>
+                                                            {% endif %}
+
+                                                            
+                                                            {% endif %}
+
+                                                            {% comment %} <option value="none">None</option> {% endcomment %}
+                                                            {% for c in allusers  %}
+                                                                <option value={{c.username}}>{{c.first_name |ljust:"10"}}{{c.last_name}}</option>
+                                                            {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        </div>
+                                                    </div> <!-- end row -->
     
-                                                <!-- comment box -->
-                                                <div class="border rounded mt-2 mb-3">
-                                                    <form action="#" class="comment-area-box">
-                                                        <textarea rows="3" class="form-control border-0 resize-none" placeholder="Write something...."></textarea>
-                                                        <div class="p-2 bg-light d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <a href="#" class="btn btn-sm px-2 font-16 btn-light"><i class="mdi mdi-account-circle"></i></a>
-                                                                <a href="#" class="btn btn-sm px-2 font-16 btn-light"><i class="mdi mdi-map-marker"></i></a>
-                                                                <a href="#" class="btn btn-sm px-2 font-16 btn-light"><i class="mdi mdi-camera"></i></a>
-                                                                <a href="#" class="btn btn-sm px-2 font-16 btn-light"><i class="mdi mdi-emoticon-outline"></i></a>
+                                                    {% comment %} <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building me-1"></i> Company Info</h5> {% endcomment %}
+                                                    {% comment %} <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="companyname" class="form-label">Company Name</label>
+                                                                <input type="text" class="form-control" id="companyname" placeholder="Enter company name">
                                                             </div>
-                                                            <button type="submit" class="btn btn-sm btn-dark waves-effect">Post</button>
                                                         </div>
-                                                    </form>
-                                                </div> <!-- end .border-->
-                                                <!-- end comment box -->
-    
-                                                <!-- Story Box-->
-                                                <div class="border border-light rounded p-2 mb-3">
-                                                    <div class="d-flex">
-                                                        <img class="me-2 rounded-circle" src="assets/images/users/avatar-3.jpg"
-                                                            alt="Generic placeholder image" height="32">
-                                                        <div>
-                                                            <h5 class="m-0">Jeremy Tomlinson</h5>
-                                                            <p class="text-muted"><small>about 2 minuts ago</small></p>
-                                                        </div>
-                                                    </div>
-                                                    <p>Story based around the idea of time lapse, animation to post soon!</p>
-    
-                                                    <img src="assets/images/small/small-1.jpg" alt="post-img" class="rounded me-1"
-                                                        height="60" />
-                                                    <img src="assets/images/small/small-2.jpg" alt="post-img" class="rounded me-1"
-                                                        height="60" />
-                                                    <img src="assets/images/small/small-3.jpg" alt="post-img" class="rounded"
-                                                        height="60" />
-    
-                                                    <div class="mt-2">
-                                                        <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i
-                                                                class="mdi mdi-reply"></i> Reply</a>
-                                                        <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i
-                                                                class="mdi mdi-heart-outline"></i> Like</a>
-                                                        <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i
-                                                                class="mdi mdi-share-variant"></i> Share</a>
-                                                    </div>
-                                                </div>
-    
-                                                <!-- Story Box-->
-                                                <div class="border border-light rounded p-2 mb-3">
-                                                    <div class="d-flex">
-                                                        <img class="me-2 rounded-circle" src="assets/images/users/avatar-4.jpg"
-                                                            alt="Generic placeholder image" height="32">
-                                                        <div>
-                                                            <h5 class="m-0">Thelma Fridley</h5>
-                                                            <p class="text-muted"><small>about 1 hour ago</small></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="font-16 text-center fst-italic text-dark">
-                                                        <i class="mdi mdi-format-quote-open font-20"></i> Cras sit amet nibh libero, in
-                                                        gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                                                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Duis
-                                                        sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper
-                                                        porta. Mauris massa.
-                                                    </div>
-    
-                                                    <div class="mx-n2 p-2 mt-3 bg-light">
-                                                        <div class="d-flex">
-                                                            <img class="me-2 rounded-circle" src="assets/images/users/avatar-3.jpg"
-                                                                alt="Generic placeholder image" height="32">
-                                                            <div>
-                                                                <h5 class="mt-0">Jeremy Tomlinson <small class="text-muted">3 hours ago</small></h5>
-                                                                Nice work, makes me think of The Money Pit.
-    
-                                                                <br/>
-                                                                <a href="javascript: void(0);" class="text-muted font-13 d-inline-block mt-2"><i
-                                                                    class="mdi mdi-reply"></i> Reply</a>
-    
-                                                                <div class="d-flex mt-3">
-                                                                    <a class="pe-2" href="#">
-                                                                        <img src="assets/images/users/avatar-4.jpg" class="rounded-circle"
-                                                                            alt="Generic placeholder image" height="32">
-                                                                    </a>
-                                                                    <div>
-                                                                        <h5 class="mt-0">Thelma Fridley <small class="text-muted">5 hours ago</small></h5>
-                                                                        i'm in the middle of a timelapse animation myself! (Very different though.) Awesome stuff.
-                                                                    </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="cwebsite" class="form-label">Website</label>
+                                                                <input type="text" class="form-control" id="cwebsite" placeholder="Enter website url">
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row --> {% endcomment %}
+                                                    {% comment %}     
+                                                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Social</h5> {% endcomment %}
+                                                    {% comment %} <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-fb" class="form-label">Facebook</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-facebook"></i></span>
+                                                                    <input type="text" class="form-control" id="social-fb" placeholder="Url">
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-tw" class="form-label">Twitter</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-twitter"></i></span>
+                                                                    <input type="text" class="form-control" id="social-tw" placeholder="Username">
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row --> {% endcomment %}
     
-                                                        <div class="d-flex mt-2">
-                                                            <a class="pe-2" href="#">
-                                                                <img src="assets/images/users/avatar-1.jpg" class="rounded-circle"
-                                                                    alt="Generic placeholder image" height="32">
-                                                            </a>
-                                                            <div class="w-100">
-                                                                <input type="text" id="simpleinput" class="form-control border-0 form-control-sm" placeholder="Add comment">
+                                                    {% comment %} <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-insta" class="form-label">Instagram</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-instagram"></i></span>
+                                                                    <input type="text" class="form-control" id="social-insta" placeholder="Url">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-lin" class="form-label">Linkedin</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-linkedin"></i></span>
+                                                                    <input type="text" class="form-control" id="social-lin" placeholder="Url">
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row --> {% endcomment %}
     
-                                                    <div class="mt-2">
-                                                        <a href="javascript: void(0);" class="btn btn-sm btn-link text-danger"><i
-                                                                class="mdi mdi-heart"></i> Like (28)</a>
-                                                        <a href="javascript: void(0);" class="btn btn-sm btn-link text-muted"><i
-                                                                class="mdi mdi-share-variant"></i> Share</a>
-                                                    </div>
-                                                </div>
-    
-                                                <!-- Story Box-->
-                                                <div class="border border-light p-2 mb-3">
-                                                    <div class="d-flex">
-                                                        <img class="me-2 rounded-circle" src="assets/images/users/avatar-6.jpg"
-                                                            alt="Generic placeholder image" height="32">
-                                                        <div>
-                                                            <h5 class="m-0">Martin Williamson</h5>
-                                                            <p class="text-muted"><small>15 hours ago</small></p>
+                                                    {% comment %} <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-sky" class="form-label">Skype</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-skype"></i></span>
+                                                                    <input type="text" class="form-control" id="social-sky" placeholder="@username">
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <div class="mb-3">
+                                                                <label for="social-gh" class="form-label">Github</label>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="mdi mdi-github"></i></span>
+                                                                    <input type="text" class="form-control" id="social-gh" placeholder="Username">
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end col -->
+                                                    </div> <!-- end row --> {% endcomment %}
+                                                    
+                                                    <div class="text-end">
+                                                        <button type="submit" class="btn btn-success mt-2" name="action" value="family"><i class="mdi mdi-content-save"></i> Save</button>
                                                     </div>
-                                                    <p>The parallax is a little odd but O.o that house build is awesome!!</p>
-    
-                                                    <iframe src='https://player.vimeo.com/video/87993762' height='300' class="img-fluid border-0"></iframe>
-                                                </div>
-    
-                                                <div class="text-center">
-                                                    <a href="javascript:void(0);" class="text-danger"><i class="mdi mdi-spin mdi-loading me-1"></i> Load more </a>
-                                                </div>
-    
-                                            </div> {% endcomment %}
+                                                </form>   
+                                                
+                                            </div>
                                             <!-- end timeline content-->
 
 
@@ -569,7 +676,7 @@
                                                     </div> <!-- end row --> {% endcomment %}
                                                     
                                                     <div class="text-end">
-                                                        <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+                                                        <button type="submit" class="btn btn-success mt-2" name="action" value="profile"><i class="mdi mdi-content-save"></i> Save</button>
                                                     </div>
                                                 </form>
                                             </div>

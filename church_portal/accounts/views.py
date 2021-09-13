@@ -2,17 +2,49 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login as Login, logout as Logout
 from django.contrib.auth.decorators import login_required
-from .models import Customusers
+from .models import Customusers,quote
+from AdminSide.models import sermon
+import random
 
 # Create your views here.
 def home(request):
+    context={} #list to hold data
+    #fetching all sermons
+    Sermons = sermon.objects.all()
+    if len(Sermons)>=3: #if the number of sermons is greater than or equal to three
+        onlythreesermons = sermon.objects.all()[:3] #fetch only three sermons for the homepage
+        context["sermon"] = onlythreesermons #put only three sermons in the list
+    else:
+        allsermons = sermon.objects.all() #fetch all sermons
+        context["sermon"] = allsermons #put all sermons in the list
     
-    return render(request,'index.html')
+    return render(request,'index.html',context)
+
+
+
+def contact(request):
+    return render(request,'contact.html')
 
 
 
 
 def login(request):
+    context={}
+    #getting the quote to display on the login page
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+    
     if request.user.is_authenticated: #checking if user is already logged in
         if request.user.admin: #checking if user is an admin
             return redirect('/AdminSide/adminhome') #if user is an admin, redirect to admin dashboard
@@ -33,12 +65,28 @@ def login(request):
             else: #if authentication is not successful
                 messages.error(request,"Incorrect Email or Password. Register if you are a new user!") #message to the user
 
-    return render(request,'login.html')
+    return render(request,'login.html',context)
 
 
 
 
 def register(request):
+
+    context={}
+    #getting the quote to display on the login page
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
     #checking if there was a post request 
     if request.method=="POST":
         email = request.POST['email'] #getting the email
@@ -73,7 +121,7 @@ def register(request):
         else:
             #telling the user the passwords entered do not match
             messages.error(request,"Passwords do not match")
-    return render(request,'register.html')
+    return render(request,'register.html',context)
 
 
 

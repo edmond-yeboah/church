@@ -140,3 +140,6 @@ MESSAGE_TAGS={
 messages.ERROR: 'danger',
 messages.INFO: 'primary',
 }
+
+PAYSTACK_SK='sk_test_a805584b8cf175960156b1678d9af309c9b022db'
+PAYSTACK_PK='pk_test_fc44085d9f9d62457e1596926f2717c26179474c'

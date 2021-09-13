@@ -5,19 +5,58 @@ from accounts.models import Customusers
 from AdminSide.models import sermon
 from django.contrib import messages
 from django.db.models import Q
-from UserSide.models import comment
+from UserSide.models import comment,family,Payment
 
 # Create your views here.
 @login_required(login_url='login')
 def admindash(request):
-    return render(request,'adminhome.html')
+    context={}
+
+    #fetching all church members in the database
+    allusers = Customusers.objects.all().exclude(is_superuser=True).exclude(admin=True).filter(is_active=True)
+    if len(allusers)>0: #if there are users in the database
+        context["allusers"] = allusers #storing fetch results in the context list
+        twousers = allusers[:2]
+        context["twousers"] = twousers
+    
+    #fetching all church members in east legon
+    eastlegon = Customusers.objects.filter(church_branch="East Legon")
+    context["eastlegon"] = eastlegon
+
+    #fetching all church members at spintex branch
+    spintex = Customusers.objects.filter(church_branch="Spintex")
+    context["spintex"] = spintex
+
+    #fetching all church memebers at cantomets
+    cantoment = Customusers.objects.filter(church_branch="Cantoment")
+    context["cantoment"] = cantoment
+    
+    #fetching all the sermons
+    allsermons = sermon.objects.all()
+    context["sermons"] = allsermons
+
+    #getting total payment
+    allpayments = Payment.objects.all().exclude(verified=False) #getting all data whose status are verified
+    total = 0
+    for s in allpayments:
+        total = int(s.amount) + total
+    context["total"] = total 
+
+    return render(request,'adminhome.html',context)
 
 
 
 
 @login_required(login_url='login')
 def finance(request):
-    return render(request,'adminfinances.html')
+    context={} #list to hold data
+    allpayments = Payment.objects.all().exclude(verified=False) #getting all data whose status are verified
+    if len(allpayments)>0: #if there are results
+        context["payments"] = allpayments #put the results in a context
+    else: #if there are no results
+        context["nopayments"] = "There are no payments records" #message to admin dashboard
+
+    return render(request,'adminfinances.html',context)
 
 
 
@@ -150,12 +189,39 @@ def users(request):
             else: #if no search query was entered
                 context["nothingentered"] ="No search query entered"
 
+        elif action=="updateuser":
+            branch = request.POST['branch'] #get the branch selected
+            status = request.POST['status'] #get the status selected
+            userid = request.POST['userid'] #get the user id
+
+            #saving to the database
+            theuser = Customusers.objects.get(id=userid) #get the we are updating
+            theuser.church_branch = branch #set user church branch to branch selected
+            theuser.status = status #set user status to status selected
+            theuser.save() #save to database
+            messages.info(request,"User update successful")
+            context["userdetails"] = theuser
+
+            try:
+                fam = family.objects.get(who=userid) #get family object of selected user
+                context["fam"] = fam #put family object in a context
+            except Exception as e: #if an error occurs
+                print(e) #print error to terminal
+
+           
+
     elif "uid" in request.GET: #if user clicks the edit icon
         uid = request.GET['uid'] #get the id of the user clicked on
         user = Customusers.objects.get(id=uid) #fetch all information of the user clicked on
         context["userdetails"] = user #putting the user information into a list
-        
 
+        try:
+            fam = family.objects.get(who=uid) #get family object of selected user
+            context["fam"] = fam #put family object in a context
+        except Exception as e: #if an error occurs
+            print(e) #print error to terminal
+
+        
     elif "delid" in request.GET: #if user clicks the delete button
         delid = request.GET['delid'] #getting the id of user to delete
         user = Customusers.objects.get(id=delid) #getting the user to delete

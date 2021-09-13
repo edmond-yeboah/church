@@ -1,11 +1,13 @@
 from django.contrib import messages
 from accounts.models import Customusers
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from AdminSide.models import sermon
-from .models import comment
+from .models import comment,Payment, family
 from django.db.models import Q
-
+from django.http import HttpRequest,HttpResponse
+import secrets
+from django.conf import settings
 # Create your views here.
 @login_required(login_url='login')
 def userdash(request):
@@ -70,56 +72,237 @@ def sermons(request):
 
 @login_required(login_url='login')
 def profile(request):
+    context={}
+    global famexits 
+    famexits = False
     #get the user's username
     user = Customusers.objects.get(username=request.user.username)
+    try:
+        fam = family.objects.get(who=request.user.id)
+        context["fam"] = fam
+        famexits = True
+    except Exception as e:
+        print(e)
+
+    #fetching all users excluding admin and super users
+    allusers = Customusers.objects.all().exclude(is_superuser=True).exclude(admin=True).filter(is_active=True)
+    context["allusers"] = allusers
 
     if request.method == "POST": #checking if a post request was sent
-        try:
-            fname = request.POST['fname'] #getting the first name entered by the user
-            lname = request.POST['lname'] #getting the last name entered by the user
-            tel = request.POST['phone'] #getting the phone number entered by the user
-            bio = request.POST['bio'] #getting the bio entered by the user
-            age = request.POST['age'] #getting the age entered by the user
-            email = request.POST['email'] #getting the email entered by the user
-            password = request.POST['password'] #getting the password entered by the user
+        action = request.POST['action'] #getting the value for the aciton
+        if action=="profile": #if the value for the action is profile
 
-            #checking if the user made a change of auth credentials change
-            if len(password)>0: #if user submitted password
+            try:
+                fname = request.POST['fname'] #getting the first name entered by the user
+                lname = request.POST['lname'] #getting the last name entered by the user
+                tel = request.POST['phone'] #getting the phone number entered by the user
+                bio = request.POST['bio'] #getting the bio entered by the user
+                age = request.POST['age'] #getting the age entered by the user
+                email = request.POST['email'] #getting the email entered by the user
+                password = request.POST['password'] #getting the password entered by the user
 
-                #updating user's profile info
-                user.first_name = fname
-                user.last_name = lname
-                user.tel = tel
-                user.bio = bio
-                user.age = age
+                #checking if the user made a change of auth credentials change
+                if len(password)>0: #if user submitted password
 
-                #for authentication side
-                user.username = email
-                user.email = email
-                user.set_password(password)
-                user.save()
-                messages.info(request,"Profile update successful, Remember to login next time with your new credentials!")
-                return redirect("/UserSide/profile/")
-            
-            else: #if user doesn't make change of auth credential request
-                user.first_name = fname
-                user.last_name = lname
-                user.tel = tel
-                user.bio = bio
-                user.age = age
-                user.save()
-                messages.info(request,"Profile update successful")
-                return redirect("/UserSide/profile/")
+                    #updating user's profile info
+                    user.first_name = fname #aetting user's first name to new name
+                    user.last_name = lname #setting user's last name to new name
+                    user.tel = tel #setting user's telephone to new telephone
+                    user.bio = bio #setting user's bio to new bio
+                    user.age = age #setting user's age to new age
+
+                    #for authentication side
+                    user.username = email #setting user's username to new email
+                    user.email = email #setting user's email to new email
+                    user.set_password(password) #setting user's new password
+                    user.save() #saving changes to the database
+                    messages.info(request,"Profile update successful, Remember to login next time with your new credentials!") #show this message
+                    return redirect("/UserSide/profile/") #redirect to the profile page
                 
-        except Exception as e: #if an error occur while getting the information
-            print(e) #print error message to terminal
+                else: #if user doesn't make change of auth credential request
+                    user.first_name = fname #setting user's first name to new name 
+                    user.last_name = lname #setting user's last name to new name
+                    user.tel = tel # setting user's telephone to new telephone
+                    user.bio = bio #setting user's bio to new bio
+                    user.age = age #setting user's age to new age
+                    user.save() #saving changes to the database
+                    messages.info(request,"Profile update successful") #show this message
+                    return redirect("/UserSide/profile/") #redirect to the profile page
+                    
+            except Exception as e: #if an error occur while getting the information
+                print(e) #print error message to terminal
 
-    return render(request,'profile.html')
+        elif action =="family": #if user select to update family hierarchy
+
+            newfam = family() #the family object
+            count = 0 #int variable
+
+            gfather = request.POST['gfather'] #get grand father selected
+            gmother = request.POST['gmother'] #get grand mother selected
+            father = request.POST['father'] #get father selected
+            mother = request.POST['mother'] #get mother selected
+            spouse = request.POST['spouse'] #get spouse selected
+            child = request.POST.get('child') #get child or children selected
+
+            # print(father)
+
+            #getting the instance of the users selected
+            if gfather == "none":
+                pass
+            else:
+                thegfather = Customusers.objects.get(username=gfather)
+
+                if famexits:
+                    fam.gfather = thegfather
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.gfather = thegfather #setting the user's grandfather
+                    newfam.save()
+                count +=1
+
+
+            if gmother == "none":
+                pass
+            else:
+                thegmother = Customusers.objects.get(username=gmother)
+
+                if famexits:
+                    fam.gmother = thegmother
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.gmother = thegmother #setting the user's grandmother
+                    newfam.save()
+                count +=1
+
+
+            if father == "none":
+                pass
+            else:
+                thefather = Customusers.objects.get(username=father)
+
+                if famexits:
+                    fam.father = thefather
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.father = thefather #setting the user's father
+                    newfam.save()
+                count +=1
+                
+
+            if mother == "none":
+                pass
+            else:
+                themother = Customusers.objects.get(username=mother)
+
+                if famexits:
+                    fam.mother = themother
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.mother = themother #setting the user's mother
+                    newfam.save()
+                count +=1
+
+
+            if spouse == "none":
+                pass
+            else:
+                thespouse = Customusers.objects.get(username=spouse)
+
+                if famexits:
+                    fam.spouse = thespouse
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.spouse = thespouse #setting the user's spouse
+                    newfam.save()
+                count +=1
+
+
+            if child == "None" or "none":
+                pass
+            else:
+                print(child)
+                thechild = Customusers.objects.get(username=child)
+
+                if famexits:
+                    fam.child = thechild
+                    fam.save()
+                else:
+                    newfam.who = Customusers.objects.get(id=request.user.id)
+                    newfam.child = thechild #setting the user's child
+                    newfam.save()
+                count +=1
+
+
+            if count>=1:
+                messages.info(request,"Family hierarchy update successful") #show this message
+            return redirect("/UserSide/profile/") #redirect to the profile page
+
+    return render(request,'profile.html',context)
 
 
 
 
 
 @login_required(login_url='login')
-def tithe(request):
-    return render(request,'tithe.html')
+def tithe(request: HttpRequest) -> HttpResponse:
+    context={}
+
+    #fetching user tithes
+    userpayments = Payment.objects.filter(email=request.user.email).filter(verified=True) #fetch user payments with email since its unique for every user
+    print(userpayments)
+    if len(userpayments)>0:
+        context["userpayments"] = userpayments #if results found, put in context list
+    else: #if no results found
+        context["nouserpayments"] = "You have not made any payments" #show message to user 
+
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        amount = request.POST['amount']
+        try:
+            newPayment = Payment()
+
+            #generating a reference
+            while not newPayment.ref:
+                ref = secrets.token_urlsafe(10)
+                similar_ref = Payment.objects.filter(ref=ref)
+                if not similar_ref:
+                    newPayment.ref = ref
+
+            #multiplying amount by 100
+            newamount = int(amount) * 100
+            print(newamount)
+
+            newPayment.fname = fname
+            newPayment.lname = lname
+            newPayment.email = email
+            newPayment.amount = amount
+
+            newPayment.save()
+
+            context["amount"] = amount
+            context["ref"] = ref
+            context["publicKey"] = settings.PAYSTACK_PK
+            context["email"] = email
+            context["amount"] =newamount
+            context["disamount"] = amount
+
+            return render(request,'makepayment.html',context)
+        except Exception as e:
+            print(e)
+
+    return render(request,'tithe.html',context)
+
+
+
+def verify_payment(request: HttpRequest, ref:str) -> HttpResponse:
+    payment = get_object_or_404(Payment,ref=ref)
+    verified = payment.verify_payment()
+    print(verified)
+    return redirect('tithe')

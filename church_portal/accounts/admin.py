@@ -1,5 +1,5 @@
 from django.contrib import admin
-from accounts.models import Customusers
+from accounts.models import Customusers, quote
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -13,9 +13,12 @@ class CustomUserAdmin(UserAdmin):
                     'tel',
                     'age',
                     'bio',
+                    'church_branch',
+                    'status',
                 )
             }
         ),
     )
     
 admin.site.register(Customusers, CustomUserAdmin)
+admin.site.register(quote)

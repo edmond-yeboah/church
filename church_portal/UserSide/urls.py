@@ -8,4 +8,5 @@ urlpatterns = [
     url(r"^UserSide/sermons/$",views.sermons, name="sermons"),
     url(r"^UserSide/profile/$",views.profile, name="profile"),
     url(r"^UserSide/tithe/$",views.tithe, name="tithe"),
+    path('<str:ref>/', views.verify_payment, name="verify-payment"),
 ]

@@ -8,10 +8,28 @@ from django.db.models import Q
 from django.http import HttpRequest,HttpResponse
 import secrets
 from django.conf import settings
+import random
+from accounts.models import quote
 # Create your views here.
 @login_required(login_url='login')
 def userdash(request):
-    return render(request, 'home.html')
+    context={}
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+
+    return render(request, 'home.html',context)
 
 
 
@@ -19,6 +37,20 @@ def userdash(request):
 @login_required(login_url='login')
 def sermons(request):
     context={}
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+
     if request.method=="POST": #checking if a post request was received
         action = request.POST['action'] #getting the type of button that was clicked
 
@@ -73,6 +105,21 @@ def sermons(request):
 @login_required(login_url='login')
 def profile(request):
     context={}
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+
     global famexits 
     famexits = False
     #get the user's username
@@ -252,6 +299,20 @@ def profile(request):
 def tithe(request: HttpRequest) -> HttpResponse:
     context={}
 
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+    
     #fetching user tithes
     userpayments = Payment.objects.filter(email=request.user.email).filter(verified=True) #fetch user payments with email since its unique for every user
     print(userpayments)

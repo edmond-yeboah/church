@@ -6,11 +6,27 @@ from AdminSide.models import sermon
 from django.contrib import messages
 from django.db.models import Q
 from UserSide.models import comment,family,Payment
+import random
+from accounts.models import quote
 
 # Create your views here.
 @login_required(login_url='login')
 def admindash(request):
     context={}
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
 
     #fetching all church members in the database
     allusers = Customusers.objects.all().exclude(is_superuser=True).exclude(admin=True).filter(is_active=True)
@@ -50,6 +66,21 @@ def admindash(request):
 @login_required(login_url='login')
 def finance(request):
     context={} #list to hold data
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+
     allpayments = Payment.objects.all().exclude(verified=False) #getting all data whose status are verified
     if len(allpayments)>0: #if there are results
         context["payments"] = allpayments #put the results in a context
@@ -64,6 +95,21 @@ def finance(request):
 @login_required(login_url='login')
 def sermons(request):
     context={}
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
+
     if request.method=="POST": #checking if a post request was received
         action = request.POST['action'] #getting the type of button that was clicked
 
@@ -152,6 +198,20 @@ def sermons(request):
 @login_required(login_url='login')
 def users(request):
     context={} #list to hold data
+
+    #getting the number of quotes in the database
+    allqoutes = quote.objects.all()
+    #getting the number of quotes
+    quotetotal = len(allqoutes)
+    #checking if there are quotes
+    if quotetotal>0:
+        #generating random number to get a quote at random from the database
+        randomnuber = random.randint(1,quotetotal)
+        #getting the quote with this random id
+        thequote = quote.objects.get(id=randomnuber)
+        context["thequote"] = thequote
+    else:
+        pass
 
     if request.method=="POST": #checking if a post request was received
         action = request.POST['action'] #getting the type of button that was clicked
